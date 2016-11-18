@@ -1,0 +1,114 @@
+@CHARSET "UTF-8";
+
+.text-align {
+	font-size: 13px;
+	text-align: center;
+	line-height: 25px
+}
+
+.mainbody {
+	width: 1000px;
+	height: 800px;
+	margin: 0px auto;
+	border: 1px solid #DBEAF9;
+}
+
+.toptitle {
+	width: 1000px;
+	height: 30px;
+	background-color: #DBEAF9;
+	font-size: 12px;
+	text-align: center;
+	line-height: 30px
+}
+
+.buttonbox {
+	width: 900px;
+	height: 40px;
+	margin: 0px auto;
+	text-align: center;
+	margin-top: 50px
+}
+
+.terminalbox {
+	width: 300px;
+	height: 300px;
+	border: 1px solid #1A9ADA;
+	position: absolute;
+	top: 200px;
+	left: 500px;
+	background-color: #FFFFFF;
+}
+
+.tboxtitle {
+	width: 100%;
+	height: 30px;
+	background-color: #1A9ADA;
+	font-size: 12px;
+	text-align: center;
+	line-height: 30px;
+	color: #ffffff;
+}
+
+.tboxcontent {
+	width: 100%;
+	height: 240px;
+}
+
+.tboxcontent ul {
+	width: 100%;
+	height: 240px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.tboxcontent ul li {
+	width: 100%;
+	height: 25px;
+	list-style: none
+}
+
+.tboxbutton {
+	width: 100%;
+	height: 30px;
+	background-color: #71D87D;
+	color: #ffffff;
+}
+
+.listTab {
+	width: 98%;
+	margin: 5px auto;
+	border: none;
+}
+
+.listTab tr {
+	width: 100%;
+	border: 1px solid #DFDFDF;
+	border-right: none;
+	border-left: none;
+	border-top: none;
+}
+
+.listTab tr td {
+	text-align: left;
+	height: 50px;
+	list-style-image: 50px;
+	font-size: 12px;
+	color: #6A6A6A;
+	border-bottom: 1px solid #DBEAF9;
+}
+
+.listTab tr td lable {
+	width: 100%;
+}
+
+.listTab tr td input {
+	border: 1px solid #6A6A6A;
+}
+.itemtable tr td
+{
+	border:none;
+	text-align:left;
+	height:30px;
+	width:100%;
+}

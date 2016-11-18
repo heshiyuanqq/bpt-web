@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://code.alibabatech.com/schema/dubbo  http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.cmri.bpt.**">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- 将多个配置文件位置放到列表中 -->
+	<bean id="propertyResources" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!-- database config -->
+				<value>classpath:conf/database.properties</value>
+			</list>
+		</constructor-arg>
+	</bean>
+	<!-- 将配置文件读取到容器中，交给Spring管理 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" ref="propertyResources" />
+	</bean>
+
+	<import resource="classpath*:conf/applicationContext-ibatis.xml" />
+	
+	<!-- *************************** 调用dubbo提供的服务配置开始 ****************************************-->
+        <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->  
+         <dubbo:application name="bpt-web" /> 
+         
+      	<!--   服务注册中心地址，表示要到这里订阅服务  -->
+         <dubbo:registry address="zookeeper://127.0.0.1:2181" />  
+      
+        <!-- 生成远程服务代理，可以像使用本地bean一样使用demoService -->  
+         <dubbo:reference id="notificationManager"  interface="org.androidpn.server.xmpp.push.AbstractNotificationManager" />  
+	<!-- *************************** 调用dubbo提供的服务配置结束 ****************************************-->
+</beans>

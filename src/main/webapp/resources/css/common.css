@@ -1,0 +1,156 @@
+h1, .hgroup h2, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+}
+body, h1, .hgroup h2, h2, h3, h4, h5, h6, blockquote, p, pre, dl, dd, menu, ol, ul, caption, th, td, form, fieldset, legend, input, button, textarea {
+    margin: 0;
+    padding: 0;
+}
+.cfl:after, .header_wrap:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.cfl:after, .kw_wrap .kw_search .sortKey:after, .kw_wrap .kw_fun ul:after, .kw_wrap .kw_list dl:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.cfl:after, .aside .operations:after, #container:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.cfl:after, #footer .nav:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.cfl, .header_wrap {
+}
+.cfl, .kw_wrap .kw_search .sortKey, .kw_wrap .kw_fun ul, .kw_wrap .kw_list dl {
+}
+.cfl, .aside .operations, #container {
+}
+.cfl, #footer .nav {
+}
+
+element.style {
+    border: medium none;
+}
+.cfl:after, .header_wrap:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.header_wrap {
+    border-bottom: 2px solid #F18336;
+    margin: 0 auto;
+    padding: 17px 0 15px;
+    width: 960px;
+}
+.cfl, .header_wrap {
+}
+
+.header_logo {
+    float: left;
+    padding-top: 14px;
+}
+
+.header_menu {
+    float: right;
+}
+
+
+.cfl:after, .header_wrap:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.cfl:after, .kw_wrap .kw_search .sortKey:after, .kw_wrap .kw_fun ul:after, .kw_wrap .kw_list dl:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.cfl:after, .aside .operations:after, #container:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.cfl:after, #footer .nav:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.header_menu_top {
+    height: 34px;
+}
+.header_menu_nav {
+    float: right;
+    height: 16px;
+    line-height: 16px;
+    margin-top: 20px;
+}
+
+.header_menu_nav li {
+    float: left;
+    margin-left: 22px;
+}
+menu, ol, ul, li {
+    list-style: none outside none;
+}
+
+.header_menu_nav li a {
+    color: #5E5D5C;
+    font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    font-size: 15.5px;
+    font-weight: bold;
+    line-height: 20px;
+}
+.header_menu_nav li a:hover, .header_menu_nav li a.on {
+    color: #F18336;
+}
+
+.header_menu_nav li.m2 {
+    position: relative;
+    z-index: 1002;
+}
+
+.breadcrumbs {
+    color: #979693;
+    margin: 10px auto;
+    width: 960px;
+}
+
+.screencover
+{
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: #000;
+	z-index: 1100;
+}

@@ -1,0 +1,89 @@
+.pass-portrait-previewboxbigsmall {
+  height: 55px;
+  width: 55px;
+  overflow: hidden;
+  margin: 0;
+}
+.pass-portrait-previewboxbig {
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  margin: 0;
+}
+li.pass-portrait-hisdefault {
+  background: #f0f0f0;
+  border: 1px solid #e5e5e5;
+}
+.pass-portrait-history li {
+  float: left;
+  height: 35px;
+  margin-right: 10px;
+  margin-top: 6px;
+  width: 36px;
+}
+.pass-portrait ul, .pass-portrait li {
+  color: #666;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pass-portrait-history {
+  overflow: hidden;
+  list-style: none;
+  height: 43px;
+}
+.pass-portrait ul, .pass-portrait li {
+  color: #666;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pass-portrait li {
+  color: #666;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pass-portrait-history li img {
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+}
+
+.pass-portrait-crop {
+  background: #e2e2e2;
+  height: 300px;
+  line-height: 300px;
+  text-align: center;
+  width: 400px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1001;
+}
+.pass-portrait-tabcontent {
+  height: 301px;
+  overflow: auto;
+  width: 440px;
+  -webkit-overflow-scrolling: touch;
+}
+.pass-portrait-crop .loadingImg {
+  height: 32px;
+  width: 32px;
+  left: 50%;
+  top: 50%;
+  margin-left: -16px;
+  margin-top: -16px;
+  visibility: visible;
+  position: absolute;
+}
+.pass-portrait-crop img {
+  vertical-align: middle;
+  max-height: 300px;
+  max-width: 400px;
+  visibility: hidden;
+}
+
+.pass-portrait-save {
+  padding-top: 40px;
+  position: relative;
+}
