@@ -1,18 +1,27 @@
 package com.cmri.bpt.web.casetest;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.androidpn.server.consdef.ConsDef;
-//import org.androidpn.server.xmpp.push.AbstractNotificationManager;
+
+//import org.androidpn.server.consdef.ConsDef;
+import org.androidpn.server.service.NotificationService;
+//import org.androidpn.server.service.UserNotFoundException;
+//import org.androidpn.server.xmpp.push.NotificationManager;
 //import org.androidpn.server.xmpp.session.ClientSession;
 //import org.androidpn.server.xmpp.session.SessionManager;
 import org.apache.log4j.Logger;
@@ -23,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.xmpp.packet.IQ;
 import com.cmri.bpt.common.user.UserContext;
 import com.cmri.bpt.common.user.UserContextHolder;
 import com.cmri.bpt.common.util.CSVUtils;
@@ -42,6 +50,7 @@ import com.cmri.bpt.entity.vo.paramVO;
 import com.cmri.bpt.entity.vo.sendBehaviorVO;
 import com.cmri.bpt.service.param.interfac.ICaseParamService;
 import com.cmri.bpt.service.param.interfac.SysParamService;
+import com.cmri.bpt.service.testcase.CaseTestService;
 import com.cmri.bpt.service.testcase.TestcaseLogService;
 import com.cmri.bpt.service.token.AppTokenSessionService;
 import com.cmri.bpt.web.util.SysValueHolder;
@@ -52,6 +61,12 @@ public class CaseTestController {
 
 	@Autowired
 	private AppTokenSessionService apptokenserver;
+	
+	@Autowired
+	private NotificationService notificationService;
+	
+	@Autowired
+	private CaseTestService caseTestService;
 
 	@Autowired
 	private TestcaseLogService logService;
@@ -63,9 +78,8 @@ public class CaseTestController {
 	private SysParamService sysService;
 
 	private static final Logger logger = Logger.getLogger("push." + CaseTestController.class);
-	
-	@Autowired//dubbo提供的服务
-	private AbstractNotificationManager notificationManager;
+
+	//private NotificationManager notificationManager;
 
 	private static Random r = new Random();
 
@@ -139,9 +153,7 @@ public class CaseTestController {
 	@RequestMapping(value = "/sendCaseWeb", method = RequestMethod.POST)
 	public String sendCaseWeb(Model mode, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("behaviorList") String behaviorList, @RequestParam("casetype") Integer casetype) {
-
 		String reStr = "发送失败!";
-
 		List<behaviorVO> behrVoList = new ArrayList<behaviorVO>();
 
 		if (behaviorList == null || behaviorList.equals("")) {
@@ -156,11 +168,10 @@ public class CaseTestController {
 			return reStr;
 		}
 
-		List<AppTokenSession> aliveSession = getLiveSession();
-
+		//		List<AppTokenSession> aliveSession = getLiveSession();换成prc
+		List<AppTokenSession> aliveSession = notificationService.getLiveSession(UserContextHolder.getUserContext().getUserId());
 		
-		System.out.println(notificationManager);
-		if (aliveSession.size() == 0) {
+		if (aliveSession==null||aliveSession.size() == 0) {
 			reStr = "当前UE不在线,发送失败!";
 			return reStr;
 		}
@@ -168,21 +179,19 @@ public class CaseTestController {
 		String testcaseBeginTime = System.currentTimeMillis() + "";
 
 		try {
-
-			switch (casetype) {
-
-			case 1:// 比例
-				randomModel(behrVoList, aliveSession, testcaseBeginTime);
-				reStr = "命令成功发送!";
-				break;
-			case 2:// 分组
-
-				groupModel(behrVoList, aliveSession, testcaseBeginTime);
-				reStr = "命令成功发送!";
-				break;
-			default:
-				break;
-			}
+				switch (casetype) {
+						case 1:// 比例
+							randomModel(behrVoList, aliveSession, testcaseBeginTime);
+							reStr = "命令成功发送!";
+							break;
+						case 2:// 分组
+			
+							groupModel(behrVoList, aliveSession, testcaseBeginTime);
+							reStr = "命令成功发送!";
+							break;
+						default:
+							break;
+				}
 		} catch (Exception ee) {
 			logger.error(ee.getMessage());
 			logger.error(ExceptionUtil.getStackTraceAsString(ee));
@@ -191,12 +200,12 @@ public class CaseTestController {
 		return reStr;
 	}
 
-	private List<AppTokenSession> getLiveSession() {
+	/*private List<AppTokenSession> getLiveSession() {//迁移到rpc:NotificationService.getLiveSession(Integer  userId) 
 
 		UserContext ctx = UserContextHolder.getUserContext();
 		Integer userId = ctx.getUserId();
 
-		List<AppTokenSession> allSessions = apptokenserver.queryByUserId(userId);//这个是本应用自己的数据库业务session，不是指androidpn的“会话session”
+		List<AppTokenSession> allSessions = apptokenserver.queryByUserId(userId);
 
 		SessionManager mgr = SessionManager.getInstance();
 
@@ -212,13 +221,10 @@ public class CaseTestController {
 		}
 		
 		return aliveSession;
-	}
+	}*/
 
 	private void groupModel(List<behaviorVO> behrVoList, List<AppTokenSession> aliveSession, String testcaseBeginTime) {
-
-	
-		UserContext uctx = UserContextHolder.getUserContext();
-		Integer userId = uctx.getUserId();
+		Integer userId = UserContextHolder.getUserContext().getUserId();
 		SysParamPO sysParam = sysService.getByUserId(userId);
 		if(sysParam==null)
 		{
@@ -227,7 +233,6 @@ public class CaseTestController {
 		}
 
 		for (behaviorVO bvoitem : behrVoList) {
-
 			List<AppTokenSession> groupSession = new ArrayList<AppTokenSession>();
 			for (AppTokenSession s : aliveSession) {
 				if (s.getTag() != null && s.getTag().equals(bvoitem.getGrouptag())) {
@@ -316,7 +321,7 @@ public class CaseTestController {
 
 	}
 
-	private void sendCmd(AppTokenSession tokenSession, String message) {
+	/*private void sendCmd(AppTokenSession tokenSession, String message) {换成了rpc:notificationService.sendCmd（）
 		// 生成推送信息
 		IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.SendCase,
 				message, ConsDef.STR_PUSH_URL);
@@ -329,7 +334,7 @@ public class CaseTestController {
 			logger.debug("向 " + tokenSession.getXppId() + " 分组:" + tokenSession.getTag() + " 推送：" + message);
 
 		}
-	}
+	}*/
 
 	private void persistPushLog(AppTokenSession tokenSession, actionVO actionItem, caseConfigVO configVo) {
 		TestcaseLog log = new TestcaseLog();
@@ -351,22 +356,22 @@ public class CaseTestController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/stopCaseWeb", method = RequestMethod.POST)
-	public String sendCaseWeb(Model mode, HttpServletRequest request, HttpServletResponse response) {
-		String reStr = "发送失败!";
-
-		UserContext ctx = UserContextHolder.getUserContext();
-		Integer userId = ctx.getUserId();
-		List<AppTokenSession> allSessions = apptokenserver.queryByUserId(userId);
-		if (allSessions != null && allSessions.size() > 0) {
-			IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.StopCase,
-					PushEnum.StopCase_Msg, ConsDef.STR_PUSH_URL);
-			for (AppTokenSession sessionItem : allSessions) {
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
+	public String stopCaseWeb(Model mode, HttpServletRequest request, HttpServletResponse response) {
+			String reStr = "发送失败!";
+	
+			Integer userId = UserContextHolder.getUserContext().getUserId();
+			List<AppTokenSession> allSessions = apptokenserver.queryByUserId(userId);
+			if (allSessions != null && allSessions.size() > 0) {
+					/*IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.StopCase,
+							PushEnum.StopCase_Msg, ConsDef.STR_PUSH_URL);
+					for (AppTokenSession sessionItem : allSessions) {
+						notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
+					}*///换成了rpc：notificationService.stopCmd
+					notificationService.stopCmd(allSessions, PushEnum.StopCase_Msg);
+					reStr = "发送成功!";
 			}
-			reStr = "发送成功!";
-		}
-
-		return reStr;
+	
+			return reStr;
 	}
 
 	private List<sendBehaviorVO> getCaseInfo(actionVO action) {
@@ -481,12 +486,10 @@ public class CaseTestController {
 
 		@Override
 		public void execute(ActionContext ctx) {
-
 			List<AppTokenSession> tokenSession = ctx.tokenSession;
 			String phoneNumber = "";
 			String phoneXppId = "";
 			Integer sysId=0;
-
 			
 			Integer userId = ctx.userId;
 		
@@ -497,20 +500,15 @@ public class CaseTestController {
 			List<String> phoneRelation = new ArrayList<String>();
 			List<String> taskRecord = new ArrayList<String>();
 			
-			
 			// the last one not call
 			if (tokenSession.size() % 2 == 1) {
 				tokenSession.remove(tokenSession.size() - 1);
 			}
-			
-			
 
 			for (int i = 0; i < tokenSession.size(); i++) {
-
 				Map param = null;
 				// 偶数的接听电话
 				if (i % 2 == 0) {
-
 					ctx.behavior.getAction().setAction("TelAnswerCase");
 
 					phoneNumber = tokenSession.get(i).getPhoneNumber();
@@ -520,9 +518,7 @@ public class CaseTestController {
 					sysId =  tokenSession.get(i).getSysId();
 
 					param = getCaseParam(userId, "TelAnswerCase");
-
 				} else { // 奇数拨打电话
-
 					ctx.behavior.getAction().setAction("TelCaseUI");
 
 					param = getCaseParam(userId, "TelCaseUI");
@@ -540,7 +536,6 @@ public class CaseTestController {
 							.append(sysId).append(",").append(phoneXppId).append(",").append(phoneNumber);
 
 					phoneRelation.add(sb.toString());
-
 				}
 
 				// 组内延时
@@ -551,7 +546,8 @@ public class CaseTestController {
 
 				String sendMessage = buildMessage(behaviorVOs, configVo, param);
 
-				sendCmd(ctx.tokenSession.get(i), sendMessage);
+				//sendCmd(ctx.tokenSession.get(i), sendMessage);换成了远程调用
+				notificationService.sendCmd(ctx.tokenSession.get(i), sendMessage);
 
 				persistPushLog(ctx.tokenSession.get(i), ctx.behavior.getAction(), configVo);
 				
@@ -628,7 +624,8 @@ public class CaseTestController {
 				List<sendBehaviorVO> behaviorVOs = getCaseInfo(action);
 
 				String sendMessage = buildMessage(behaviorVOs, configVo, param);
-				sendCmd(ctx.tokenSession.get(i), sendMessage);
+				//sendCmd(ctx.tokenSession.get(i), sendMessage);
+				notificationService.sendCmd(ctx.tokenSession.get(i), sendMessage);
 				persistPushLog(ctx.tokenSession.get(i), ctx.behavior.getAction(), configVo);
 				
 				
@@ -672,7 +669,8 @@ public class CaseTestController {
 
 				String sendMessage = buildMessage(behaviorVOs, configVo, param);
 
-				sendCmd(ctx.tokenSession.get(i), sendMessage);
+				//sendCmd(ctx.tokenSession.get(i), sendMessage);
+				notificationService.sendCmd(ctx.tokenSession.get(i), sendMessage);
 				persistPushLog(ctx.tokenSession.get(i), ctx.behavior.getAction(), configVo);
 				
 				StringBuilder sb = new StringBuilder();

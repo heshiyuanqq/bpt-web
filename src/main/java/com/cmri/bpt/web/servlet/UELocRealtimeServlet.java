@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
@@ -18,10 +19,14 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.androidpn.server.service.UserNotFoundException;
-import org.androidpn.server.xmpp.session.ClientSession;
-import org.androidpn.server.xmpp.session.SessionManager;
+
+
+import org.androidpn.server.service.NotificationService;
+//import org.androidpn.server.service.UserNotFoundException;直接使用了androidpn API,得重构
+//import org.androidpn.server.xmpp.session.ClientSession;
+//import org.androidpn.server.xmpp.session.SessionManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cmri.bpt.common.base.Result;
 import com.cmri.bpt.common.entity.CaseUeVO;
@@ -40,7 +45,6 @@ import com.cmri.bpt.web.restor.SpringBeanUtil;
 
 @ServerEndpoint("/tools/ue/v1/loc/realtime")
 public class UELocRealtimeServlet {
-
 	static final Logger logger = Logger.getLogger("websocket." + UELocRealtimeServlet.class);
 
 	static boolean init = false;
@@ -178,21 +182,23 @@ public class UELocRealtimeServlet {
 		}
 
 		private static List<LocInfoDTO> getTheRealInfo() {
-
 			List<LocInfoDTO> locList = new ArrayList<LocInfoDTO>();
 
 			IGetSingleUeLogService ueLogService = SpringBeanUtil.getBean(IGetSingleUeLogService.class);
 			AppStatusService statusService = SpringBeanUtil.getBean(AppStatusService.class);
 			AppTokenSessionService tokenSession = SpringBeanUtil.getBean(AppTokenSessionService.class);
 			TestcaseLogService tcLogService = SpringBeanUtil.getBean(TestcaseLogService.class);
+			NotificationService notificationService = SpringBeanUtil.getBean(NotificationService.class);
 
 			List<AppStatus> appStatusList = statusService.queryAll();
-			if (appStatusList.size() <= 0)
+			if (appStatusList.size() <= 0){
 				return locList;
+			}
 
 			List<AppTokenSession> appTokenSessions = tokenSession.queryAll();
-			if (appTokenSessions.size() <= 0)
+			if (appTokenSessions.size() <= 0){
 				return locList;
+			}
 
 			Map<Integer, AppTokenSession> tokenSessionMap = new HashMap<Integer, AppTokenSession>();
 			for (AppTokenSession ts : appTokenSessions) {
@@ -201,7 +207,7 @@ public class UELocRealtimeServlet {
 
 			Map<Integer, AppStatus> statusMap = new HashMap<Integer, AppStatus>();
 			Map<String, Integer> xpp_sessionId_Map = new HashMap<String, Integer>();
-			Map<String, Boolean> aliveMap = new HashMap<String, Boolean>();
+			Map<String, Boolean> aliveMap = null;
 
 			String realPath = "";
 			{// get the real path
@@ -220,20 +226,16 @@ public class UELocRealtimeServlet {
 			}
 
 			List<CaseUeVO> ueVos = new ArrayList<CaseUeVO>();
-
+/*
 			Collection<ClientSession> clientS = SessionManager.getInstance().getSessions();
-
 			for (ClientSession s : clientS) {
-
 				try {
-
 					aliveMap.put(s.getUsername(), s.getPresence().isAvailable());
-
 				} catch (UserNotFoundException e) {
-
 					e.printStackTrace();
 				}
-			}
+			}*///换成了rpc:notificationService.getAliveMap();
+			aliveMap=notificationService.getAliveMap();
 
 			for (AppStatus s : appStatusList) {
 

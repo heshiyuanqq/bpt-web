@@ -7,10 +7,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.androidpn.server.consdef.ConsDef;
-import org.androidpn.server.xmpp.push.AbstractNotificationManager;
+import org.androidpn.server.service.NotificationService;
+/*import org.androidpn.server.consdef.ConsDef;
+import org.androidpn.server.xmpp.push.NotificationManager;
 import org.androidpn.server.xmpp.session.ClientSession;
-import org.androidpn.server.xmpp.session.SessionManager;
+import org.androidpn.server.xmpp.session.SessionManager;*///侵入了androidpn的api，得重构
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,9 @@ public class UEController {
 	AppStatusService statusS;
 	
 	@Autowired
-	private AbstractNotificationManager notificationManager;
+	NotificationService notificationService;
+
+//	private NotificationManager notificationManager;
 
 	@RequestMapping(value = "/ue/tag", method = RequestMethod.GET)
 	@ResponseBody
@@ -151,9 +154,7 @@ public class UEController {
 	@RequestMapping(value = "/ueMgr/phonecrawl", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean crawlPhone() {
-
-		UserContext ctx = UserContextHolder.getUserContext();
-		Integer userId = ctx.getUserId();
+		Integer userId = UserContextHolder.getUserContext().getUserId();
 
 		PhoneNumberCrawler crawler = PhoneCrawlerHolder.getPhoneCrawler(userId);
 
@@ -162,14 +163,10 @@ public class UEController {
 			return true;
 		}
 
-		List<AppTokenSession> allSessions = service.queryByUserId(userId);
-
+	/*	List<AppTokenSession> allSessions = service.queryByUserId(userId);
 		SessionManager mgr = SessionManager.getInstance();
-
 		List<AppTokenSession> liveSessions = new ArrayList<AppTokenSession>();
-
 		for (AppTokenSession s : allSessions) {
-
 			ClientSession cs = mgr.getSession(s.getXppId());
 			if(cs!=null)
 			{
@@ -177,9 +174,9 @@ public class UEController {
 				{
 					liveSessions.add(s);
 				}
-				
 			}
-		}
+		}*///换成rpc:notificationService.getLiveSession(userId)
+		List<AppTokenSession> liveSessions = notificationService.getLiveSession(userId);
 
 		crawler = new PhoneNumberCrawler(userId, liveSessions);
 
@@ -224,23 +221,26 @@ public class UEController {
 	@RequestMapping(value = "/ueMgr/flymode", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean flymode(@RequestBody Map map) {
-
 		boolean result = false;
-
 		List<Integer> ids = (List<Integer>) map.get("ids");
 
 		List<AppTokenSession> allSessions = service.queryByIds(ids);
 
+	/*	if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}*/
+
 		if (allSessions != null && allSessions.size() > 0) {
+				/*
+				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.FlyModeOfUe,
+						"", ConsDef.STR_PUSH_URL);
+	
+				for (AppTokenSession sessionItem : allSessions) {
+					notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
+				}*///换成rpc notificationService.flymodeCmd(allSessions, "");
+				notificationService.flymodeCmd(allSessions, "");
 
-			IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.FlyModeOfUe,
-					"", ConsDef.STR_PUSH_URL);
-
-			for (AppTokenSession sessionItem : allSessions) {
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-			}
-
-			result = true;
+				result = true;
 		}
 
 		return result;
@@ -255,17 +255,22 @@ public class UEController {
 		UserContext ctx = UserContextHolder.getUserContext();
 		Integer userId = ctx.getUserId();
 		List<AppTokenSession> allSessions = service.queryByUserId(userId);
-
+/*
+		if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}
+*/
 		if (allSessions != null && allSessions.size() > 0) {
-
-			IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.StopCaseLog,
-					PushEnum.StopCaseLog_Msg, ConsDef.STR_PUSH_URL);
-
-			for (AppTokenSession sessionItem : allSessions) {
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-			}
-
-			reStr = "发送成功!";
+				/*
+				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, PushEnum.StopCaseLog,
+						PushEnum.StopCaseLog_Msg, ConsDef.STR_PUSH_URL);
+	
+				for (AppTokenSession sessionItem : allSessions) {
+					notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
+				}
+				*///换成rpc  notificationService. stopCaseLogCmd(List<AppTokenSession> tokenSessions,String message);
+			   notificationService.stopCaseLogCmd(allSessions, PushEnum.StopCaseLog_Msg);
+			   reStr = "发送成功!";
 		}
 
 		return reStr;
@@ -279,6 +284,11 @@ public class UEController {
 		String reStr = "发送失败!";
 
 		List<AppTokenSession> careSessions = getTokenSessionBySysId(ids);		
+		
+/*
+		if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}*/
 
 		if (careSessions != null && careSessions.size() > 0) {
 
@@ -287,17 +297,17 @@ public class UEController {
 			Integer retryTime = Integer.valueOf(retry);
 
 			for (AppTokenSession sessionItem : careSessions) {
-
 				i++;
 				String template = "{'delayTime':%0,'retryTime':%1}";
 				template = template.replaceAll("%0", String.valueOf(delayTime * i)).replaceAll("%1",
 						String.valueOf(retryTime));
 
-				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
+			/*	IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
 						PushEnum.ReceiveCaseLog, template, ConsDef.STR_PUSH_URL);
 
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
+				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);*///换成分rpc
+				
+				notificationService.receiveLogCmd(sessionItem, template);
 			}
 
 			reStr = "发送成功!";
@@ -317,21 +327,27 @@ public class UEController {
 
 		List<AppTokenSession> allSessions = getTokenSessionBySysId(ids);
 
+		/*if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}
+*/
 		if (allSessions != null && allSessions.size() > 0) {
 
 			String msgTitle = "";
-			if (type.equals("Agent"))
-				msgTitle = PushEnum.AgentUpdate;
-			else if (type.equals("Jar"))
-				msgTitle = PushEnum.JarUpdate;
+			if (type.equals("Agent")){
+					msgTitle = PushEnum.AgentUpdate;
+			}else if (type.equals("Jar")){
+					msgTitle = PushEnum.JarUpdate;
+			}
 
 			for (AppTokenSession sessionItem : allSessions) {
 
-				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, msgTitle, ftp,
+				/*IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, msgTitle, ftp,
 						ConsDef.STR_PUSH_URL);
 
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
+				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);*///换成rpc
+				
+				notificationService.ueupdateCmd(sessionItem, msgTitle, ftp);
 			}
 
 			reStr = "发送成功!";
@@ -349,6 +365,10 @@ public class UEController {
 	
 		List<AppTokenSession> allSessions = getTokenSessionBySysId(ids);
 
+	/*	if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}*/
+
 		String template = "{'ip':%0,'delayTime':%1}";
 		template = template.replaceAll("%0", ftp).replaceAll("%1", String.valueOf(5));
 
@@ -356,11 +376,12 @@ public class UEController {
 
 			for (AppTokenSession sessionItem : allSessions) {
 
-				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
+				/*IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
 						PushEnum.UeSyncTime, template, ConsDef.STR_PUSH_URL);
 
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
+				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);*///换成rpc
+				
+				notificationService.syncTimeCmd(sessionItem, template);
 			}
 
 			reStr = "发送成功!";
@@ -378,6 +399,10 @@ public class UEController {
 		UserContext ctx = UserContextHolder.getUserContext();
 		Integer userId = ctx.getUserId();
 		List<AppTokenSession> allSessions = service.queryByUserId(userId);
+/*
+		if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}*/
 
 		if (allSessions != null && allSessions.size() > 0) {
 
@@ -389,11 +414,12 @@ public class UEController {
 					template = template.replaceAll("%0", sessionItem.getXppId().substring(11)).replaceAll("%1",
 							sessionItem.getPhoneNumber());
 
-					IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
+				/*	IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
 							PushEnum.UeStoreCallNumber, template, ConsDef.STR_PUSH_URL);
 
-					notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
+					notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);*///换成rpc
+					
+					notificationService.storeCallCmd(sessionItem, template);
 				}
 
 			}
@@ -414,13 +440,17 @@ public class UEController {
 		Integer userId = ctx.getUserId();
 		List<AppTokenSession> allSessions = service.queryByUserId(userId);
 
+	/*	if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}*/
+
 		TokenSessionStore storeService = SpringBeanUtil.getBean(TokenSessionStore.class);
 
 		if (allSessions != null && allSessions.size() > 0) {
 
 			for (AppTokenSession sessionItem : allSessions) {
 
-				ClientSession clientSession = SessionManager.getInstance().getSession(sessionItem.getXppId());
+				/*ClientSession clientSession = SessionManager.getInstance().getSession(sessionItem.getXppId());
 				
 				if (clientSession != null && clientSession.getPresence().isAvailable()) {
 
@@ -428,12 +458,12 @@ public class UEController {
 							PushEnum.UeExpireCallNumber, "", ConsDef.STR_PUSH_URL);
 
 					notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
-					sessionItem.setPhoneNumber(null);
-					storeService.updateTokenSession(sessionItem);
-
+				}*///换成rpc
+				boolean flag = notificationService.expireCallCmd(sessionItem, "");
+				if(flag){
+						sessionItem.setPhoneNumber(null);
+						storeService.updateTokenSession(sessionItem);
 				}
-
 			}
 
 			reStr = "发送成功!";
@@ -450,26 +480,32 @@ public class UEController {
 
 		
 		List<AppTokenSession> allSessions =getTokenSessionBySysId(ids);
-
+/*
+		if (notificationManager == null) {
+			notificationManager = NotificationManager.getInstance();
+		}
+*/
 		if (allSessions != null && allSessions.size() > 0) {
 
 			String msgTitle = "";
-			if (type.equals("shutdown"))
+			if (type.equals("shutdown")){
 				msgTitle = PushEnum.ShutdownUe;
-			else if (type.equals("restart"))
+			}else if (type.equals("restart")){
 				msgTitle = PushEnum.RestartUe;
-			else if (type.equals("openwifi"))
+			}else if (type.equals("openwifi")){
 				msgTitle = PushEnum.UeWifiOn;
-			else if (type.equals("closewifi"))
+			}else if (type.equals("closewifi")){
 				msgTitle = PushEnum.UeWifiOff;
+			}
 
 			for (AppTokenSession sessionItem : allSessions) {
 
-				IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, msgTitle, "",
+			/*	IQ notificationIQ = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY, msgTitle, "",
 						ConsDef.STR_PUSH_URL);
 
-				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);
-
+				notificationManager.sendNotifcationToUser(sessionItem.getXppId(), notificationIQ);*///换成rpc
+				
+				notificationService.uecontrolCmd(sessionItem, msgTitle, "");
 			}
 
 			reStr = "发送成功!";
