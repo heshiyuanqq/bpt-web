@@ -12,6 +12,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.cmri.bpt.common.user.UserContext;
 import com.cmri.bpt.common.user.UserContextHandler;
 import com.cmri.bpt.common.user.UserContextHolder;
+import com.cmri.bpt.service.param.mapper.SysParamMapper;
 import com.cmri.bpt.service.user.UserService;
 import com.cmri.bpt.service.user.bo.User;
 import com.cmri.bpt.web.restor.RestController;
@@ -57,7 +58,8 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 	UserContextHandler userContextHandler = UserContextHolder.getUserContextHandler();
 
 	protected void HandleUser(HttpServletRequest request) {
-
+		String uri = request.getRequestURI();
+		System.out.println(uri);
 		if (request.getRequestURI().startsWith(RestController.REQUEST_MAPPING_ROOT)) {
 			return;
 		}

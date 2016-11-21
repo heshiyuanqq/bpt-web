@@ -46,6 +46,8 @@ public class RestController {
         Result<?> result = null;
         // ------------------------------------------------------------------
         try {
+        	
+        	System.err.println("****************userContextHandler="+userContextHandler+"*****************");
             userContextHandler.handleTokenSessionUserContext(request);
         } catch (AuthenticationException ex) {
             result = Result.newOne();

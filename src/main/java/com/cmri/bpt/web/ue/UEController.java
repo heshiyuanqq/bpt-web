@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.xmpp.packet.IQ;
 
 import com.cmri.bpt.common.token.TokenSessionStore;
@@ -79,7 +80,6 @@ public class UEController {
 	@RequestMapping(value = "/ue/real", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<AppStatus>> realTime() {
-
 		UserContext ctx = UserContextHolder.getUserContext();
 
 		userLogger.debug("/ue/real userId:" + ctx.getUserId());
