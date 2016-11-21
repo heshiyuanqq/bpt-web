@@ -8,8 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.androidpn.server.consdef.ConsDef;
-import org.androidpn.server.xmpp.push.NotificationManager;
+
+
+
+import org.androidpn.server.service.NotificationService;
+//import org.androidpn.server.consdef.ConsDef;//侵入了androidpn的api,得重构
+//import org.androidpn.server.xmpp.push.NotificationManager;
 import org.apache.log4j.Logger;
 import org.xmpp.packet.IQ;
 
@@ -20,6 +24,7 @@ import com.cmri.bpt.common.token.TokenSessionExpireStrategy;
 import com.cmri.bpt.common.util.ExceptionUtil;
 import com.cmri.bpt.entity.auth.AppTokenSession;
 import com.cmri.bpt.entity.push.PushEnum;
+import com.cmri.bpt.web.restor.SpringBeanUtil;
 
 public class PhoneNumberCrawler {
 
@@ -132,88 +137,94 @@ public class PhoneNumberCrawler {
 	}
 
 	class CrawlThread extends Thread {
-
 		@Override
 		public void run() {
-
 			alive = true;
 			retryTimes = 0;
-
 			int j = 0;
-
+			
+			NotificationService notificationService = SpringBeanUtil.getBean(NotificationService.class);
+			
 			while (true && retryTimes < 3) {	
-				
 				if(teminate)
 				{
 					alive=false;
 					return;
 				}
-				
 				phoneRelation.clear();
-
 				plogger.debug(j++ + " retrytimes:" + retryTimes);
-
 				if (noPhoneList.size() == 0) {
-
-					if (noPhoneFailGetList.size() == 0)
+					if (noPhoneFailGetList.size() == 0){
 						break;
-
+					}
 					retryTimes++;
-
 					noPhoneList.addAll(noPhoneFailGetList);
-
 					noPhoneFailGetList.clear();
-
 				}
 
 				int unkonwSize = noPhoneList.size();
 				int konwSize = hasPhoneList.size();
 
-				if (konwSize == 0)
+				if (konwSize == 0){
 					break;
-
+				}
 				int min = Math.min(unkonwSize, konwSize);
-
 				// get min begin send
 				{
-
 					plogger.debug("进入下发流程……");
-
-					NotificationManager notificationManager = NotificationManager.getInstance();
-
+				//	NotificationManager notificationManager = NotificationManager.getInstance();//换成rpc
+					//封装一个方法：根据传递的字符串集合信息，组装一组IO，然后依次发送
 					for (int i = 0; i < min; i++) {
-
-						String orignalCall_template = "{'delayTime':5,'phone':%1}";
-						String terminateCall_template = "{'delayTime':5,'ueId':%1}";
-
-						orignalCall_template = orignalCall_template.replaceAll("%1",
-								String.valueOf(hasPhoneList.get(i).getPhoneNumber()));
-
-						terminateCall_template = terminateCall_template.replaceAll("%1",
-								String.valueOf(noPhoneList.get(i).getId()));
-
-						IQ terminateCall = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
-								PushEnum.UeTerminatingCall, terminateCall_template, ConsDef.STR_PUSH_URL);
-
-						IQ orignalCall = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
-								PushEnum.UeOriginatingCall, orignalCall_template, ConsDef.STR_PUSH_URL);
-
-						notificationManager.sendNotifcationToUser(noPhoneList.get(i).getXppId(), orignalCall);
-
-						push_logger.debug(noPhoneList.get(i).getXppId() + " " + orignalCall_template);
-
-						notificationManager.sendNotifcationToUser(hasPhoneList.get(i).getXppId(), terminateCall);
-
-						push_logger.debug(hasPhoneList.get(i).getXppId() + " " + terminateCall_template);
-						
-						//记录拨叫关系
-						phoneRelation.put(noPhoneList.get(i).getId(), hasPhoneList.get(i).getId());
-						
-
-						noPhoneTryGetList.add(noPhoneList.get(i));
-
+									/*String orignalCall_template = "{'delayTime':5,'phone':%1}";
+									String terminateCall_template = "{'delayTime':5,'ueId':%1}";
+									orignalCall_template = orignalCall_template.replaceAll("%1",
+											String.valueOf(hasPhoneList.get(i).getPhoneNumber()));
+									terminateCall_template = terminateCall_template.replaceAll("%1",
+											String.valueOf(noPhoneList.get(i).getId()));
+									IQ terminateCall = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
+											PushEnum.UeTerminatingCall, terminateCall_template, ConsDef.STR_PUSH_URL);
+									IQ orignalCall = notificationManager.createNotificationIQ(ConsDef.STR_PUSH_API_KEY,
+											PushEnum.UeOriginatingCall, orignalCall_template, ConsDef.STR_PUSH_URL);
+									notificationManager.sendNotifcationToUser(noPhoneList.get(i).getXppId(), orignalCall);
+									notificationManager.sendNotifcationToUser(hasPhoneList.get(i).getXppId(), terminateCall);
+									*///换成rpc
+								
+								
+								
+								String orignalCall_template = "{'delayTime':5,'phone':%1}";
+								String terminateCall_template = "{'delayTime':5,'ueId':%1}";
+								orignalCall_template = orignalCall_template.replaceAll("%1",
+										String.valueOf(hasPhoneList.get(i).getPhoneNumber()));
+								terminateCall_template = terminateCall_template.replaceAll("%1",
+										String.valueOf(noPhoneList.get(i).getId()));
+								
+								ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+								
+								HashMap<String, String> orignalCall_map = new HashMap<String, String>();
+								orignalCall_map.put("title", PushEnum.UeOriginatingCall);
+								orignalCall_map.put("message", orignalCall_template);
+								orignalCall_map.put("toUsername", noPhoneList.get(i).getXppId());
+								
+								HashMap<String, String> terminateCall_map = new HashMap<String, String>();
+								orignalCall_map.put("title", PushEnum.UeTerminatingCall);
+								orignalCall_map.put("message", terminateCall_template);
+								orignalCall_map.put("toUsername", hasPhoneList.get(i).getXppId());
+								
+								list.add(orignalCall_map);
+								list.add(terminateCall_map);
+								
+								notificationService.sendNotifcationsToUsers(list);
+								
+								
+								
+								
+								
+								push_logger.debug(noPhoneList.get(i).getXppId() + " " + orignalCall_template);
+								push_logger.debug(hasPhoneList.get(i).getXppId() + " " + terminateCall_template);
+								//记录拨叫关系
+								phoneRelation.put(noPhoneList.get(i).getId(), hasPhoneList.get(i).getId());
+								noPhoneTryGetList.add(noPhoneList.get(i));
 					}
-
 				}
 
 				syncState = SyncState.Listening;

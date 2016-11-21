@@ -235,7 +235,7 @@ public class UELocRealtimeServlet {
 					e.printStackTrace();
 				}
 			}*///换成了rpc:notificationService.getAliveMap();
-			aliveMap=notificationService.getAliveMap();
+			aliveMap=notificationService.getClientSessionAliveMap();
 
 			for (AppStatus s : appStatusList) {
 

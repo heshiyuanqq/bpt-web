@@ -112,7 +112,7 @@
 
 
 	<!-- AndroidPN Bean Configure -->
-		<!-- 暂时移到bpt-webPushService中了 -->
+		<!-- 暂时移到bpt-push中去了 -->
 	<!-- AndroidPN Bean Configure End -->
 
 </beans>
