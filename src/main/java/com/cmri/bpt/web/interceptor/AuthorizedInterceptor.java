@@ -59,7 +59,7 @@ public class AuthorizedInterceptor extends HandlerInterceptorAdapter {
 				      StringBuilder sb=new StringBuilder("");
 				      sb.append("<html>");  
 				      sb.append("<script type=\"text/javascript\">"); 
-				      sb.append("window.open('/login','_top')");  
+				      sb.append("window.open('/web/login','_top')");  
 				      sb.append("</script>");  
 				      sb.append("</html>");
 				      out.print(sb.toString());

@@ -1,40 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="${pageContext.request.contextPath}/css/public.css"
+<link href="${ctx}/css/public.css"
 	rel="stylesheet" type="text/css">
 
-<link href="${pageContext.request.contextPath}/css/buttonstyle.css"
+<link href="${ctx}/css/buttonstyle.css"
 	rel="stylesheet" type="text/css">
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery-1.8.0.js"></script>
+	src="${ctx}/js/jquery-1.8.0.js"></script>
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+	src="${ctx}/js/jquery.form.js"></script>
 
 
 <script type="text/javascript" language="javascript"
-	src="${pageContext.request.contextPath}/js/commenhead.js"></script>
+	src="${ctx}/js/commenhead.js"></script>
 <script type="text/javascript" language="javascript"
-	src="${pageContext.request.contextPath}/js/taskmain/fxw_taskmain.js"></script>
+	src="${ctx}/js/taskmain/fxw_taskmain.js"></script>
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
+	href="${ctx}/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap-theme.min.css">
+	href="${ctx}/bootstrap/css/bootstrap-theme.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
+	href="${ctx}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
 	rel="stylesheet">
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${ctx}/js/jquery.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/js/bootstrap/bootstrap.min.js"></script>
+	src="${ctx}/js/bootstrap/bootstrap.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+	src="${ctx}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/echarts/build/dist/echarts.js"></script>
+	src="${ctx}/echarts/build/dist/echarts.js"></script>
 
 <title>测试结果与分析</title>
 <style type="text/css">
@@ -327,17 +328,17 @@ behaviormap.put("Network","NW");
 behaviormap.put("CellChange","Cell");
 
 var behaviorimg=new Map();
-behaviorimg.put("Tel","${pageContext.request.contextPath}/img/result/call.gif");
-behaviorimg.put("WeiXinText","${pageContext.request.contextPath}/img/result/txt.gif");
-behaviorimg.put("WeiXinImage","${pageContext.request.contextPath}/img/result/img.gif");
-behaviorimg.put("WeiXinVoice","${pageContext.request.contextPath}/img/result/voc.gif");
-behaviorimg.put("WeiXinVideo","${pageContext.request.contextPath}/img/result/vid.gif");
-behaviorimg.put("FTP","${pageContext.request.contextPath}/img/result/ftp.gif");
-behaviorimg.put("SMS","${pageContext.request.contextPath}/img/result/sms.gif");
-behaviorimg.put("Web","${pageContext.request.contextPath}/img/result/web.gif");
-behaviorimg.put("Ping","${pageContext.request.contextPath}/img/result/ping.gif");
-behaviorimg.put("Network","${pageContext.request.contextPath}/img/result/nw.gif");
-behaviorimg.put("CellChange","${pageContext.request.contextPath}/img/result/nw.gif");
+behaviorimg.put("Tel","${ctx}/img/result/call.gif");
+behaviorimg.put("WeiXinText","${ctx}/img/result/txt.gif");
+behaviorimg.put("WeiXinImage","${ctx}/img/result/img.gif");
+behaviorimg.put("WeiXinVoice","${ctx}/img/result/voc.gif");
+behaviorimg.put("WeiXinVideo","${ctx}/img/result/vid.gif");
+behaviorimg.put("FTP","${ctx}/img/result/ftp.gif");
+behaviorimg.put("SMS","${ctx}/img/result/sms.gif");
+behaviorimg.put("Web","${ctx}/img/result/web.gif");
+behaviorimg.put("Ping","${ctx}/img/result/ping.gif");
+behaviorimg.put("Network","${ctx}/img/result/nw.gif");
+behaviorimg.put("CellChange","${ctx}/img/result/nw.gif");
 //填写查询时间
 $(function(){
 	//$("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
@@ -426,7 +427,7 @@ function detail(casename)
 		 $.ajax({
 				type : "POST",
 				async : false,
-				url : "${pageContext.request.contextPath}/result/searchbehaviorbycase",
+				url : "${ctx}/result/searchbehaviorbycase",
 		        data:  { 
 		        	casename:casename,
 					},
@@ -443,7 +444,7 @@ function detail(casename)
 					 var a="<div class=\"panel panel-"+color[num%4]+"\" id=\""+casename+"show\">"+
 					   "<div class=\"panel-heading\" style=\"text-align:center\">"+
 					       "<span >"+titlename+"</span>"+ 
-					       "<img id=\"u4743_img\" class=\"img \" src=\"${pageContext.request.contextPath}/img/result/u4726.png\" onclick=\"showlogresult('"+casename+"');\" tabindex=\"0\" style=\"width:20px;height:20px;margin-left:20%;cursor: pointer;\"> " +          
+					       "<img id=\"u4743_img\" class=\"img \" src=\"${ctx}/img/result/u4726.png\" onclick=\"showlogresult('"+casename+"');\" tabindex=\"0\" style=\"width:20px;height:20px;margin-left:20%;cursor: pointer;\"> " +          
 					  " </div>"+
 					  " <div class=\"panel-body\">";
 					  var group_num=1;
@@ -493,7 +494,7 @@ function  deleteByName(casename){
 	$.ajax({
 		type : "POST",
 		async : false,
-		url : "${pageContext.request.contextPath}/result//deleteCaseByName",
+		url : "${ctx}/result//deleteCaseByName",
         data:  { 
         	casename:casename,
 			},
@@ -537,7 +538,7 @@ function search(){
 	$.ajax({
 		type : "POST",
 		async : false,
-		url : "${pageContext.request.contextPath}/result/searchallcase",
+		url : "${ctx}/result/searchallcase",
         data:  { 
 			selectedcase:grade,
 			start_date:start_date,
@@ -604,7 +605,7 @@ function show_case_list(){
 	$.ajax({
 		type : "POST",
 		async : false,
-		url : "${pageContext.request.contextPath}/result/searchallcase",
+		url : "${ctx}/result/searchallcase",
        data:  { 
 			selectedcase:grade,
 			start_date:start_date,
@@ -671,7 +672,7 @@ function showlogresult(casename) {
 /* 	alert(casename+"----"+encodeURI(casename));
 	casename=encodeURI(casename); */
 
-	$("#showAllLog").attr("href","${pageContext.request.contextPath}/logAnalyze/loganylizebycaselogname?caselogname="+casename);
+	$("#showAllLog").attr("href","${ctx}/logAnalyze/loganylizebycaselogname?caselogname="+casename);
 	document.getElementById("showAllLog").click();
 }
 var clicknum=0;
@@ -681,7 +682,7 @@ function showonelogresult(casename,logtype) {
 	//alert(logtype);
    require.config({
        paths: {
-           echarts: '${pageContext.request.contextPath}/echarts/build/dist'
+           echarts: '${ctx}/echarts/build/dist'
        }
    });
    require(
@@ -699,7 +700,7 @@ function showonelogresult(casename,logtype) {
       	    $.ajax({
    			type : "POST",
    			async : false,
-   			url : "${pageContext.request.contextPath}/logtopic/getftplog",
+   			url : "${ctx}/logtopic/getftplog",
    			data : { 
    				case_name : casename
    			},
@@ -1191,7 +1192,7 @@ function showonelogresult(casename,logtype) {
               $.ajax({
       			type : "POST",
       			async : false,
-      			url : "${pageContext.request.contextPath}/logtopic/getnetworklog",
+      			url : "${ctx}/logtopic/getnetworklog",
       			data : { 
       				case_name : casename
       			},
@@ -1429,7 +1430,7 @@ function showonelogresult(casename,logtype) {
               $.ajax({
       			type : "POST",
       			async : false,
-      			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+      			url : "${ctx}/logtopic/getnetworkflowlog",
       			data : { 
       				case_name : casename,
       				name : 'calllog'
@@ -1558,7 +1559,7 @@ function showonelogresult(casename,logtype) {
               $.ajax({
       			type : "POST",
       			async : false,
-      			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+      			url : "${ctx}/logtopic/getnetworkflowlog",
       			data : { 
       				case_name : casename,
       				name : 'videolog'
@@ -1689,7 +1690,7 @@ function showonelogresult(casename,logtype) {
               $.ajax({
       			type : "POST",
       			async : false,
-      			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+      			url : "${ctx}/logtopic/getnetworkflowlog",
       			data : { 
       				case_name : casename
       			},
@@ -1818,7 +1819,7 @@ function showonelogresult(casename,logtype) {
                $.ajax({
        			type : "POST",
        			async : false,
-       			url : "${pageContext.request.contextPath}/logtopic/getcallsuccessrate",
+       			url : "${ctx}/logtopic/getcallsuccessrate",
        			data : { 
        				case_name : casename
        			},
@@ -1992,7 +1993,7 @@ function showonelogresult(casename,logtype) {
             	   $.ajax({
              			type : "POST",
              			async : false,
-             			url : "${pageContext.request.contextPath}/logtopic/getcallusernumber",
+             			url : "${ctx}/logtopic/getcallusernumber",
              			//getcallusernumber             			
              			data : { 
              				case_name : casename
@@ -2181,7 +2182,7 @@ function showonelogresult(casename,logtype) {
         	   $.ajax({
        			type : "POST",
        			async : false,
-       			url : "${pageContext.request.contextPath}/logtopic/getweblog",
+       			url : "${ctx}/logtopic/getweblog",
        			data : { 
        				case_name : casename
        			},
@@ -2633,7 +2634,7 @@ function showonelogresult(casename,logtype) {
         	   $.ajax({
        			type : "POST",
        			async : false,
-       			url : "${pageContext.request.contextPath}/logtopic/getpinglog",
+       			url : "${ctx}/logtopic/getpinglog",
        			data : { 
        				case_name : casename
        			},
@@ -3062,7 +3063,7 @@ function showonelogresult(casename,logtype) {
                $.ajax({
           			type : "POST",
           			async : false,
-          			url : "${pageContext.request.contextPath}/logtopic/getcellchangelog",
+          			url : "${ctx}/logtopic/getcellchangelog",
           			data : { 
           				case_name : casename
           			},
@@ -3458,7 +3459,7 @@ function showonelogresult(casename,logtype) {
         	   $.ajax({
        			type : "POST",
        			async : false,
-       			url : "${pageContext.request.contextPath}/logtopic/getweixinlog",
+       			url : "${ctx}/logtopic/getweixinlog",
        			data : { 
        				case_name : casename,
        				type:  type
@@ -3858,7 +3859,7 @@ function showonelogresult(casename,logtype) {
         	   $.ajax({
           			type : "POST",
           			async : false,
-          			url : "${pageContext.request.contextPath}/logtopic/getPicUESmsData",
+          			url : "${ctx}/logtopic/getPicUESmsData",
           			data : { 
           				case_name : casename
           			},
@@ -4220,7 +4221,7 @@ function clearmypicture(){
 <%-- 		<div id="column2"
 			style="width: 24%; height: 100%; float: left; border: 1px solid #DBEAF9; border-collapse: collapse;">
 			<div id="u3722" class="ax_形状" style="width: 100%">
-				<img id="u4638_img" class="img " style="width: 100%" src="${pageContext.request.contextPath}/img/result/u4638.png">
+				<img id="u4638_img" class="img " style="width: 100%" src="${ctx}/img/result/u4638.png">
 				<div id="u3724" class="text"  style="text-align:center ;left:27%" >
 					<p>
 						<span>测试结果与指标项目</span>
@@ -4233,7 +4234,7 @@ function clearmypicture(){
 
 		<div id="column3" style="width: 52%; height: 100%; float: left; border: 1px solid #DBEAF9; border-collapse: collapse;">
 			<div class="ax_形状" style="">
-				<img id="u4638_img" class="img " src="${pageContext.request.contextPath}/img/result/u4638.png" style="width: 100%">
+				<img id="u4638_img" class="img " src="${ctx}/img/result/u4638.png" style="width: 100%">
 				<div id="u3724" class="text"  style="text-align:center ;left:64%" >
 					<span style="font-family: Arial Negreta, Arial; font-weight: 700; color: #FFF;">测试结果与指标纵向对比</span>
 				</div>

@@ -2,6 +2,7 @@
 	pageEncoding="utf-8"%>
 
 <script type="text/javascript">
-var __appBaseUrl = "<%=request.getContextPath()%>";
+<%-- var __appBaseUrl = "<%=request.getContextPath()%>"; --%>
+var __appBaseUrl = "/web";/* nginx配置location */
 </script>
 

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-
+<%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,11 +87,11 @@ div.dlg-item-bar {
 <%@ include file="/WEB-INF/common/var.jsp"%>
 <%@ include file="/WEB-INF/common/bootstrap_css.jsp"%>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/jquery.ext.css">
+	href="${ctx }/resources/css/jquery.ext.css">
 <script
-	src="${pageContext.request.contextPath}/resources/common/common.js"></script>
+	 src="${ctx}/resources/common/common.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/common/jquery.ext.js"></script>
+	 src="${ctx}/resources/common/jquery.ext.js"></script>
 	
 <!-- 系统参数样式开始 -->
  <style type="text/css">
@@ -259,7 +259,7 @@ div.dlg-item-bar {
 </body>
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/common/common.js">
+	src="${ctx}/resources/common/common.js">
 	
 </script>
 
@@ -287,7 +287,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/stopLog",
+			url : "${ctx}/ueMgr/stopLog",
 			data : {},
 			success : function(data) {
 				Toast.show(data, 5000);
@@ -307,7 +307,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/receiveLog",
+			url : "${ctx}/ueMgr/receiveLog",
 			data : {
 				"delay" : delay,
 				"retry" : retry,
@@ -330,7 +330,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/ueupdate",
+			url : "${ctx}/ueMgr/ueupdate",
 			data : {
 				"ftp" : ftp,
 				"type" : type,
@@ -349,7 +349,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/phonecrawl",
+			url : "${ctx}/ueMgr/phonecrawl",
 			success : function(data) {
 				Toast.show("成功", 5000);
 			},
@@ -363,7 +363,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/phonecrawlend",
+			url : "${ctx}/ueMgr/phonecrawlend",
 			success : function(data) {
 				Toast.show("成功", 5000);
 			},
@@ -377,7 +377,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/storeCall",
+			url : "${ctx}/ueMgr/storeCall",
 			success : function(data) {
 				Toast.show("成功", 5000);
 			},
@@ -391,7 +391,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/expireCall",
+			url : "${ctx}/ueMgr/expireCall",
 			success : function(data) {
 				Toast.show("成功", 5000);
 			},
@@ -407,7 +407,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/syncTime",
+			url : "${ctx}/ueMgr/syncTime",
 			data : {
 				"ftp" : ftp,
                 "ids":ids
@@ -427,7 +427,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/uecontrol",
+			url : "${ctx}/ueMgr/uecontrol",
 			data : {
 
 				"type" : type,
@@ -450,7 +450,7 @@ div.dlg-item-bar {
 				$.ajax({
 					type : "POST",
 					async : false,
-					url : "${pageContext.request.contextPath}/ueMgr/quit",
+					url : "${ctx}/ueMgr/quit",
 					data : {
 						"ids":ids
 					},
@@ -478,7 +478,7 @@ div.dlg-item-bar {
 		$.ajax({
 			type : "GET",
 			async : false,
-			url : "${pageContext.request.contextPath}/ueMgr/saveSysParam",
+			url : "${ctx}/ueMgr/saveSysParam",
 			data : params,
 			success : function(data) {
 				$("#ftp_id").textbox('setValue', ftpIp);
@@ -497,7 +497,7 @@ div.dlg-item-bar {
 	$(function() {
 
 		//查出当前用户的系统参数
-		$.getJSON("${pageContext.request.contextPath}/ueMgr/showSysParam",
+		$.getJSON("${ctx}/ueMgr/showSysParam",
 				function(data) {
 					$("#table_sysParam input[name='ftpIp']").val(data.ftpIp);
 					$("#ftp_id").textbox('setValue', data.ftpIp);

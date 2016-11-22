@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,23 +9,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery-1.8.0.js"></script>
+	src="${ctx}/js/jquery-1.8.0.js"></script>
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+	src="${ctx}/js/jquery.form.js"></script>
 
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
+	href="${ctx}/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap-theme.min.css">
+	href="${ctx}/bootstrap/css/bootstrap-theme.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
+	href="${ctx}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
 	rel="stylesheet">
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${ctx}/js/jquery.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/js/bootstrap/bootstrap.min.js"></script>
+	src="${ctx}/js/bootstrap/bootstrap.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+	src="${ctx}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <title>参数配置</title>
 <style type="text/css">
 .left_title {
@@ -86,7 +87,7 @@
 			$.ajax({
 						type : "POST",
 						async : false,
-						url : "${pageContext.request.contextPath}/webCaseTest/saveCaseParam",
+						url : "${ctx}/webCaseTest/saveCaseParam",
 						data : {
 							"paramlist" : params,
 						},
@@ -221,7 +222,7 @@
 		$.ajax({
 					type : "GET",
 					async : false,
-					url : "${pageContext.request.contextPath}/webCaseTest/queryUserParam",
+					url : "${ctx}/webCaseTest/queryUserParam",
 					data : {
 
 					},

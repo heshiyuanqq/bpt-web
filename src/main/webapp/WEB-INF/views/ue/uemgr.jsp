@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-
+<%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -144,11 +144,11 @@ div.dlg-item-bar {
 
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/common/util.js">
+	src="${ctx }/resources/common/util.js">
 	
 </script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/common/json.js">
+	src="${ctx }/resources/common/json.js">
 	
 </script>
 

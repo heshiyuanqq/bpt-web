@@ -6,35 +6,35 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="${pageContext.request.contextPath}/css/public.css"
+<link href="${ctx}/css/public.css"
 	rel="stylesheet" type="text/css">
 
-<link href="${pageContext.request.contextPath}/css/buttonstyle.css"
+<link href="${ctx}/css/buttonstyle.css"
 	rel="stylesheet" type="text/css">
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery-1.8.0.js"></script>
+	src="${ctx}/js/jquery-1.8.0.js"></script>
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+	src="${ctx}/js/jquery.form.js"></script>
 
 
 <script type="text/javascript" language="javascript"
-	src="${pageContext.request.contextPath}/js/commenhead.js"></script>
+	src="${ctx}/js/commenhead.js"></script>
 <script type="text/javascript" language="javascript"
-	src="${pageContext.request.contextPath}/js/taskmain/fxw_taskmain.js"></script>
+	src="${ctx}/js/taskmain/fxw_taskmain.js"></script>
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
+	href="${ctx}/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap-theme.min.css">
+	href="${ctx}/bootstrap/css/bootstrap-theme.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
+	href="${ctx}/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css"
 	rel="stylesheet">
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-<%-- <script src="${pageContext.request.contextPath}/js/map.js"></script> --%>
+<script src="${ctx}/js/jquery.min.js"></script>
+<%-- <script src="${ctx}/js/map.js"></script> --%>
 <script
-	src="${pageContext.request.contextPath}/js/bootstrap/bootstrap.min.js"></script>
+	src="${ctx}/js/bootstrap/bootstrap.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+	src="${ctx}/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <title>eNB大容量性能测试集装箱系统</title>
 <style type="text/css">
 .glyphicon {
@@ -110,7 +110,7 @@
 	}
 	
 	function returnpre(){
-		$("#return").attr("href","${pageContext.request.contextPath}/nav/result/resultMain");
+		$("#return").attr("href","${ctx}/nav/result/resultMain");
 		document.getElementById("return").click();
 	}
 
@@ -362,12 +362,12 @@
 
 
 	<script
-		src="${pageContext.request.contextPath}/echarts/build/dist/echarts.js"></script>
+		src="${ctx}/echarts/build/dist/echarts.js"></script>
 	<script type="text/javascript">
 			
 			require.config({
 						paths : {
-							echarts : '${pageContext.request.contextPath}/echarts/build/dist'
+							echarts : '${ctx}/echarts/build/dist'
 						}
 					});
 			require(
@@ -400,7 +400,7 @@
 						$.ajax({
 								type : "POST",
 								async : true,
-								url : "${pageContext.request.contextPath}/logtopic/getnetworklog",
+								url : "${ctx}/logtopic/getnetworklog",
 								data : {
 									case_name : "${logAnylizeInfoVO.caselogname}"
 								},
@@ -634,7 +634,7 @@
 		              $.ajax({
 		        			type : "POST",
 		        			async : false,
-		        			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+		        			url : "${ctx}/logtopic/getnetworkflowlog",
 		        			data : { 
 		        				case_name : "${logAnylizeInfoVO.caselogname}",
 		        				name : 'calllog'
@@ -753,7 +753,7 @@
 		              $.ajax({
 		        			type : "POST",
 		        			async : false,
-		        			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+		        			url : "${ctx}/logtopic/getnetworkflowlog",
 		        			data : { 
 		        				case_name : "${logAnylizeInfoVO.caselogname}",
 		        				name : 'videolog'
@@ -870,7 +870,7 @@
 		              $.ajax({
 		        			type : "POST",
 		        			async : false,
-		        			url : "${pageContext.request.contextPath}/logtopic/getnetworkflowlog",
+		        			url : "${ctx}/logtopic/getnetworkflowlog",
 		        			data : { 
 		        				case_name : "${logAnylizeInfoVO.caselogname}"
 		        			},		                  
@@ -1011,7 +1011,7 @@
 						$.ajax({
 				type : "POST",
 				async : true,
-				url : "${pageContext.request.contextPath}/logtopic/getcallsuccessrate",
+				url : "${ctx}/logtopic/getcallsuccessrate",
 				data : {
 					case_name : "${logAnylizeInfoVO.caselogname}"
 				},
@@ -1157,7 +1157,7 @@
 			$.ajax({
 				type : "POST",
 				async : true,
-				url : "${pageContext.request.contextPath}/logtopic/getcallusernumber",
+				url : "${ctx}/logtopic/getcallusernumber",
 				data : {
 					case_name : "${logAnylizeInfoVO.caselogname}"
 				},
@@ -1351,7 +1351,7 @@
 						$.ajax({
 									type : "POST",
 									async : true,
-									url : "${pageContext.request.contextPath}/logtopic/getftplog",
+									url : "${ctx}/logtopic/getftplog",
 									data : {
 										case_name : "${logAnylizeInfoVO.caselogname}"
 									},
@@ -1830,7 +1830,7 @@
 			$.ajax({
 				type : "POST",
 				async : true,
-				url : "${pageContext.request.contextPath}/logtopic/getweblog",
+				url : "${ctx}/logtopic/getweblog",
 				data : {
 					case_name : "${logAnylizeInfoVO.caselogname}"
 				},

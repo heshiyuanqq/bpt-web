@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<script type="text/javascript" src="<c:url value="/vendors/activemq/amq_jquery_adapter.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/vendors/activemq/amq.js"/>"></script>
+<script type="text/javascript" src="${ctx}/vendors/activemq/amq_jquery_adapter.js"></script>
+<script type="text/javascript" src="${ctx}/vendors/activemq/amq.js"></script>
 <script>
 
 

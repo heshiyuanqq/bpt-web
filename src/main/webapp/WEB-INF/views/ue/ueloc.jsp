@@ -18,11 +18,11 @@
 	src="<%=request.getContextPath()%>/vendors/laytpl/laytpl.js"></script>
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/jquery.ext.css">
+	href="${ctx}/resources/css/jquery.ext.css">
 <script
-	src="${pageContext.request.contextPath}/resources/common/common.js"></script>
+	src="${ctx}/resources/common/common.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/common/jquery.ext.js"></script>
+	src="${ctx}/resources/common/jquery.ext.js"></script>
 
 
 

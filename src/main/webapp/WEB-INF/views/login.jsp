@@ -353,7 +353,7 @@
 		<form role="form" name="logForm" id="logForm" class="form-horizontal"
 			action="${ctx}/login" method="post">
 			<div class="input-group m-b-20">
-				<img src="<c:url value="/images/logo.gif"/>" alt="China Mobile">
+				<img src="${ctx}/images/logo.gif" alt="China Mobile">
 			</div>
 			<div class="input-group m-b-20 ">
 				<span class="input-group-addon"><i class="md md-person"></i></span>
@@ -419,7 +419,7 @@
 		<form role="form" name="regForm" id="regForm" class="form-horizontal"
 			method="post">
 			<div class="input-group m-b-20">
-				<img src="<c:url value="/images/logo.gif"/>" alt="China Mobile">
+				<img src="${ctx}/images/logo.gif" alt="China Mobile">
 			</div>
 			<div class="input-group m-b-20">
 				<span class="input-group-addon"><i
@@ -500,7 +500,7 @@
 	<!-- Forgot Password -->
 	<div class="lc-block" id="l-forget-password">
 		<div class="input-group m-b-20">
-			<img src="<c:url value="/images/logo.gif"/>" alt="China Mobile">
+			<img src="${ctx}/images/logo.gif" alt="China Mobile">
 		</div>
 		<p class="text-left">系统将会向邮箱发送找回密码邮件,即可重置新密码</p>
 		<form role="form" name="forForm" id="forForm" class="form-horizontal"
@@ -526,4 +526,6 @@
 	</div>
 	<%@ include file="/WEB-INF/views/system/foot.jsp"%>
 </body>
+
+
 </html>

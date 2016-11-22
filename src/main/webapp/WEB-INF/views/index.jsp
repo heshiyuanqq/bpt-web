@@ -4,10 +4,10 @@
 
 
 <link type="text/css" rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/myStyle.css" />
+	href="${ctx}/css/myStyle.css" />
 
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/favicon.ico"
+	href="${ctx}/favicon.ico"
 	type="images/x-icon">
 
 
@@ -248,13 +248,13 @@
 						"你确定要退出该系统吗?",
 						function(flag) {
 							if (flag) {
-								$.get("${pageContext.request.contextPath}/logout",function(){
+								$.get("${ctx}/logout",function(){
 										$(".tabs li").each(function(index, obj) {
 											//获取所有可关闭的选项卡
 											var tab = $(".tabs-closable", this).text();
 											$(".easyui-tabs").tabs('close', tab);
 										});
-										window.location.href = "${pageContext.request.contextPath}/login";
+										window.location.href = "${ctx}/login";
 								});
 							}
 						});
@@ -310,7 +310,7 @@
 	<!-- LOGO -->
 	<div data-options="region:'north',border:false"
 		style="height: 61px; background-color: #F8F8F8;">
-		<img src="${pageContext.request.contextPath}/images/cm.png"
+		<img src="${ctx}/images/cm.png"
 			style="z-index: 2; padding-left: 20px; padding-top: 11px;"
 			width="129px" height="40px" />
 		<div
@@ -353,11 +353,11 @@
 				style="overflow: auto; padding: 10px;">
 				<ul>
 					<li><a href="javascript:void(0);"
-						onclick="addTab(this,'ueGroupManage');" url="nav/ue/uemgr"
+						onclick="addTab(this,'ueGroupManage');" url="${ctx}/nav/ue/uemgr"
 						class="easyui-linkbutton myMenuLiBtn"
 						data-options="plain:true,iconCls:'ueGroupManage'">&nbsp;UE分组管理</a></li>
 					<li style="margin-top: 5px;"><a href="javascript:void(0);"
-						onclick="addTab(this,'ueRealTime');" url="/nav/ue/uerealtime"
+						onclick="addTab(this,'ueRealTime');" url="${ctx}/nav/ue/uerealtime"
 						class="easyui-linkbutton myMenuLiBtn"
 						data-options="plain:true,iconCls:'ueRealTime'">&nbspUE实时状态</a></li>
 
@@ -369,7 +369,7 @@
                      
                      
 					<li style="margin-top: 5px;"><a href="javascript:void(0);"
-						onclick="addTab(this,'ueConsole');" url="/nav/ue/ueconsole"
+						onclick="addTab(this,'ueConsole');" url="${ctx }/nav/ue/ueconsole"
 						class="easyui-linkbutton myMenuLiBtn"
 						data-options="plain:true,iconCls:'ueConsole'">&nbspUE控制台</a></li>
 
@@ -389,7 +389,7 @@
 
 									<li><span> <a href="javascript:void(0);"
 											onclick="addTab(this,'testcaseManage');"
-											url="/nav/casetest/mixCaseTest"
+											url="${ctx }/nav/casetest/mixCaseTest"
 											data-options="plain:true,iconCls:'testcaseManage'">&nbsp;混合业务测试</a>
 									</span></li>
 									<li><span>其他测试</span></li>
@@ -398,7 +398,7 @@
 					</li>
 					<li style="margin-top: 5px;"><a href="javascript:void(0);"
 						onclick="addTab(this,'testcaseConfig');"
-						url="/nav/casetest/paramConfig"
+						url="${ctx }/nav/casetest/paramConfig"
 						class="easyui-linkbutton myMenuLiBtn"
 						data-options="plain:true,iconCls:'testcaseConfig'">&nbsp;测试参数管理</a></li>
 				</ul>
@@ -408,7 +408,7 @@
 				<ul>
 					<li><a href="javascript:void(0);"
 						onclick="addTab(this,'statisticResult');"
-						url="/nav/result/resultMain" class="easyui-linkbutton myMenuLiBtn"
+						url="${ctx }/nav/result/resultMain" class="easyui-linkbutton myMenuLiBtn"
 						data-options="plain:true,iconCls:'statisticResult'">&nbsp;统计结果</a></li>
 
 				</ul>

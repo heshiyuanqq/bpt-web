@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,26 +9,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery-1.8.0.js"></script>
+	src="${ctx}/js/jquery-1.8.0.js"></script>
 <script language="javascript" type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+	src="${ctx}/js/jquery.form.js"></script>
 
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css">
+	href="${ctx}/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/bootstrap/css/bootstrap-theme.min.css">
+	href="${ctx}/bootstrap/css/bootstrap-theme.min.css">
 
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${ctx}/js/jquery.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/js/bootstrap/bootstrap.min.js"></script>
+	src="${ctx}/js/bootstrap/bootstrap.min.js"></script>
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/jquery.ext.css">
+	href="${ctx}/resources/css/jquery.ext.css">
 <script
-	src="${pageContext.request.contextPath}/resources/common/common.js"></script>
+	src="${ctx}/resources/common/common.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/common/jquery.ext.js"></script>
+	src="${ctx}/resources/common/jquery.ext.js"></script>
 <title>混合测试</title>
 
 
@@ -139,7 +140,7 @@
 		$.ajax({
 				type : "POST",
 				async : false,
-				url : "${pageContext.request.contextPath}/webCaseTest/getGroupList",
+				url : "${ctx}/webCaseTest/getGroupList",
 		        data:  {
 			},
 			success : function(data) {
@@ -161,7 +162,7 @@
 		$.ajax({
 				type : "POST",
 				async : false,
-				url : "${pageContext.request.contextPath}/webAction/getActionListWeb",
+				url : "${ctx}/webAction/getActionListWeb",
 				success : function(data){
 					if(data != null && data != '' && data != "FAILED"){
 						//console.log(data);
@@ -335,7 +336,7 @@
 				$.ajax({
 					type : "POST",
 					async : false,
-					url : "${pageContext.request.contextPath}/webCaseTest/sendCaseWeb",
+					url : "${ctx}/webCaseTest/sendCaseWeb",
 			        data:  {
 			        	behaviorList : JSON.stringify(behaviorList),
 			        	casetype : casetype,
@@ -357,7 +358,7 @@
 		$.ajax({
 			type : "POST",
 			async : false,
-			url : "${pageContext.request.contextPath}/webCaseTest/stopCaseWeb",
+			url : "${ctx}/webCaseTest/stopCaseWeb",
 	        data:  {
 			},
 			success : function(data) {
